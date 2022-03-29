@@ -20,10 +20,15 @@ const main = async () => {
   let hydrateTxn = await waveContract.hydrate("A message!");
   await hydrateTxn.wait(); // Wait for the transaction to be mined
 
-
   const [_, randomPerson] = await hre.ethers.getSigners();
   hydrateTxn = await waveContract.connect(randomPerson).hydrate("Another message!");
   await hydrateTxn.wait(); // Wait for the transaction to be mined
+
+  //spam check
+
+  // let hydrateTxn2 = await waveContract.hydrate("second messasge!");
+  // await hydrateTxn2.wait(); // Wait for the transaction to be mined
+
 
   let allHydratees = await waveContract.getAllHydratees();
   console.log(allHydratees);
