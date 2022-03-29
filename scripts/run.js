@@ -1,8 +1,18 @@
 const main = async () => {
   const waveContractFactory = await hre.ethers.getContractFactory("WavePortal");
-  const waveContract = await waveContractFactory.deploy();
+  const waveContract = await waveContractFactory.deploy({
+    value: hre.ethers.utils.parseEther("0.1"),
+  });
   await waveContract.deployed();
   console.log("Contract addy:", waveContract.address);
+
+  let contractBalance = await hre.ethers.provider.getBalance(
+    waveContract.address
+  );
+  console.log(
+    "Contract balance:",
+    hre.ethers.utils.formatEther(contractBalance)
+  );
 
   let waveCount;
   hydratedCount = await waveContract.getTotalHydrated();
@@ -10,12 +20,19 @@ const main = async () => {
   let hydrateTxn = await waveContract.hydrate("A message!");
   await hydrateTxn.wait(); // Wait for the transaction to be mined
 
+
   const [_, randomPerson] = await hre.ethers.getSigners();
   hydrateTxn = await waveContract.connect(randomPerson).hydrate("Another message!");
   await hydrateTxn.wait(); // Wait for the transaction to be mined
 
   let allHydratees = await waveContract.getAllHydratees();
   console.log(allHydratees);
+
+  contractBalance = await hre.ethers.provider.getBalance(waveContract.address);
+  console.log(
+    "Contract balance:",
+    hre.ethers.utils.formatEther(contractBalance)
+  );
 
   await waveContract.getTotalHydrated();
 

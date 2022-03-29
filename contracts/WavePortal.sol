@@ -17,7 +17,7 @@ contract WavePortal {
 
     Hydrated[] hydratees;
 
-    constructor() {
+    constructor() payable {
         console.log("gm! stay hydrated and keep inviting your friend to discord server");
     }
 
@@ -27,6 +27,13 @@ contract WavePortal {
       hydratees.push(Hydrated(msg.sender, _message, block.timestamp));
       emit NewHydrated(msg.sender, block.timestamp, _message);
 
+      uint prizeAmount = 0.0001 ether;
+      require(
+        prizeAmount <= address(this).balance,
+        "Trying to withdraw more money than the contract has."
+    );
+    (bool success, ) = (msg.sender).call{value: prizeAmount}("");
+    require(success, "Failed to withdraw money from contract.");
     }
 
     function getAllHydratees() public view returns(Hydrated[] memory) {
