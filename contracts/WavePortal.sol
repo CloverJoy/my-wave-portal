@@ -27,10 +27,7 @@ contract WavePortal {
 
     function hydrate(string memory _message) public {
 
-      require(
-            lastHydratedAt[msg.sender] + 15 minutes < block.timestamp,
-            "Wait 15m"
-        );
+      require(lastHydratedAt[msg.sender] + 30 seconds < block.timestamp, "Must wait 30 seconds before waving again.");
       lastHydratedAt[msg.sender] = block.timestamp;
       totalHydrated += 1;
       console.log("%s is hydrated! w/ message %s", msg.sender, _message);
