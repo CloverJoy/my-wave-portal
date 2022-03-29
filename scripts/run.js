@@ -1,22 +1,23 @@
 const main = async () => {
-  const [owner, randomPerson] = await hre.ethers.getSigners();
   const waveContractFactory = await hre.ethers.getContractFactory("WavePortal");
   const waveContract = await waveContractFactory.deploy();
   await waveContract.deployed();
+  console.log("Contract addy:", waveContract.address);
 
-  console.log("Contract deployed to: ", waveContract.address);
-  console.log("contract deployed by: ", owner.address);
-
-  let hydratedCount;
+  let waveCount;
   hydratedCount = await waveContract.getTotalHydrated();
 
-  let hydrateTxn = await waveContract.hydrate();
-  await hydrateTxn.wait();
-  hydratedCount = await waveContract.getTotalHydrated();
+  let hydrateTxn = await waveContract.hydrate("A message!");
+  await hydrateTxn.wait(); // Wait for the transaction to be mined
 
-  hydrateTxn = await waveContract.connect(randomPerson).hydrate();
-  await hydrateTxn.wait();
-  hydratedCount = await waveContract.getTotalHydrated();
+  const [_, randomPerson] = await hre.ethers.getSigners();
+  hydrateTxn = await waveContract.connect(randomPerson).hydrate("Another message!");
+  await hydrateTxn.wait(); // Wait for the transaction to be mined
+
+  let allHydratees = await waveContract.getAllHydratees();
+  console.log(allHydratees);
+
+  await waveContract.getTotalHydrated();
 
 };
 
