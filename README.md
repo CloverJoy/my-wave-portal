@@ -1,6 +1,6 @@
 # my-wave-portal
 
-My first solidity smart contract development training on hardhat environment.
+My first solidity smart contract development training on hardhat environment! Twitter but you tweet it with your wallet! 
 
 # Basic Sample Hardhat Project
 
